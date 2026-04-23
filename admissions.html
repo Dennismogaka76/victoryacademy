@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <style> 
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        max-width: 900px; margin: 40px auto;
+        padding: 20px; line-height: 1.5;
+        } 
+        h1, h2 { text-align: center;
+        color: #2c3e50;
+        }
+        .section {
+        margin-bottom: 30px; border-bottom: 1px solid #ddd;
+        padding-bottom: 20px;
+        } label { display: block; margin: 10px 0 5px;
+        font-weight: bold;
+        }
+        input[type="text"], input[type="email"], input[type="tel"], input[ type="date" ], textarea, select {
+             width: 100%; padding: 8px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc; border-radius: 4px;
+        box-sizing: border-box;
+        }
+        .checkbox-group, .radio-group { margin: 10px 0;
+        }
+        .checkbox-group label, .radio-group label {
+        display: inline-block; margin-right: 20px;
+        font-weight: normal;
+        }
+        .signature {
+        margin-top: 30px;
+        }
+        .note { font-style: italic; color: #555;
+        margin-top: 5px;
+        }
+        </style>
+        
+    
+      
+    <title>Document</title>
+</head>
+<body>
+    <div style="text-align: center; margin-bottom: 30px;"> 
+        <h2>VICTORY JOLICAGE ACADEMY </h2>
+        <img class="" src="images/logo3.jpg" width="100px" alt="logo">
+<h1>APPLICATION FOR ADMISSION</h1>
+ </div>
+<form action="/submit-admission" method="POST" enctype="multipa	/form-data">
+<!-- Section 1: Child’s Details -->
+<div class="section">
+<h2>1. CHILD'S DETAILS</h2>
+<label for=" rst_name">First Name:</label> <input type="text" id=" rst_name" name=" rst_name" required>
+<label for="middle_name">Middle Name:</label>
+<input type="text" id="middle_name" name="middle_name">
+<label for="last_name">Last Name:</label> <input type="text" id="last_name" name="last_name" required>
+<label for="physical_address">Physical Address:</label> <textarea id="physical_address" name="physical_address" rows="3" required></textarea>
+<label>Religion:</label>
+ 
+<input type=" text name= religion">
+<div class="radio-group">
+<label>Gender:</label>
+<label><input type="radio" name="gender" value="M" required> Male</label>
+<label><input type="radio" name="gender" value="F">
+Female</label>
+</div>
+<label>Date of Birth:</label>
+<input type="date" name="dob" required>
+<label>Admission Required For (select one):</label>
+<div class="checkbox-group">
+<label><input type="radio" name="grade" value="PP I"> PP
+I</label>
+<label><input type="radio" name="grade" value="PP II"> PP
+II</label>
+<label><input type="radio" name="grade" value="Grade 1">
+Grade 1</label>
+<label><input type="radio" name="grade" value="Grade 2">
+Grade 2</label>
+<label><input type="radio" name="grade" value="Grade 3">
+Grade 3</label>
+<label><input type="radio" name="grade" value="Grade 4">
+Grade 4</label>
+<label><input type="radio" name="grade" value="Grade 5">
+Grade 5</label>
+<label><input type="radio" name="grade" value="Grade 6">
+ Grade 6</label>
+ 
+
+</div>
+<label>Starting Date:</label>
+<input type="date" name="starting_date" required>
+<label>Any learning challenges to the child
+(describe):</label>
+<textarea name="learning_challenges" rows="3"></textarea>
+<label>Child's special talents if any:</label>
+<textarea name="special_talents" rows="3"></textarea> </div>
+<!-- Section 2: Parents/Legal Guardians -->
+<div class="section">
+<h2>2. PARENTS'/LEGAL GUARDIANS</h2>
+<h3>Father's Details</h3>
+<label>Full Name:</label>
+<input type="text" name="father_name">
+<label>Phone:</label>
+<input type="tel" name="father_phone">
+<label>Email:</label>
+<input type="email" name="father_email">
+<label>Home Physical Address:</label>
+<textarea name="father_address" rows="2"></textarea>
+<h3>Mother's Details</h3>
+<label>Full Name:</label>
+<input type=" text" name= "mother_name"	>
+<label>Phone:</label> <input type="tel" name="mother_phone">
+<label>Email:</label>
+<input type="email" name="mother_email">
+<label>Home Physical Address:</label>
+<textarea name="mother_address" rows="2"></textarea>
+<h3>Legal Guardians (non-biological parent) - if applicable</h3> <label>Full Name:</label>
+<input type="text" name="guardian1_name">
+<label>Phone:</label>
+<input type="tel" name="guardian1_phone">
+<label>Email:</label>
+<input type="email" name="guardian1_email">
+<label>Home Physical Address:</label>
+<textarea name="guardian1_address" rows="2"></textarea>
+<label>Physical address where the child resides:</label>
+<textarea name="child_residence" rows="3" required></textarea>
+<label>Authorized visitors/Relatives or child pickup persons:</label> <label>1) Name:</label>
+<input type="text" name="pickup1_name">
+<label>Phone:</label>
+<input type="tel" name="pickup1_phone">
+<label>2) Name:</label>
+ 
+<input type="text" name= "pickup2_name" > <label>Phone:</label> <input type="tel" name="pickup2_phone">
+<p class="note">(IDs of each authorized persons MUST be uploaded later or sent to school)</p> 
+</div>
+<!-- Section 3: Transpo	ation -->
+<div class="section">
+<h2>3. TRANSPORTATION</h2>
+<div class="radio-group">
+<label>Will the child require using the school Van?</label>
+<label><input type="radio" name="transport" value="yes">
+Yes</label>
+<label><input type="radio" name="transport" value="no" checked> No</label>
+</div>
+<div class="checkbox-group">
+<label>When will the van be used? (if yes)</label> <label><input type="checkbox" name="van_time[]" value="morning"> Morning</label>
+<label><input type="checkbox" name="van_time[]" value="afternoon"> Afternoon</label>
+</div>
+<label>If yes, describe the exact area of pickup and drop off at home:</label>
+<textarea name="pickup_dropoff" rows="3"></textarea> </div>
+<!-- Section 4: School Meals -->
+<div class="section">
+<h2>4. WILL THE CHILD REQUIRE SCHOOL MEALS?</h2> 
+<div class="radio-group"> <label><input type="radio" name="meals" value="yes">
+Yes</label>
+<label><input type="radio" name="meals" value="no"> No</label>
+</div>
+<label>If yes, list any foods not taken / State any allergies related to food:</label>
+<textarea name="allergies" rows="3"></textarea>
+</div>
+<!-- Additional Medical & Photo Consents (combined) -->
+<div class="section">
+<h2>Medical and Photo Consents / Child’s Information</h2>
+<label>Blood Group:</label>
+<input type="text" name="blood_group">
+<label>Nationality:</label>
+<input type="text" name="nationality">
+<div class="radio-group">
+<label>Is the child fully immunized?</label><input type="radio" name="immunized"
+value="yes"> Yes</label>
+<label><input type="radio" name="immunized" value="no">
+No</label>
+</div>
+<p class="note">(Please upload immunization card later)</p> <label>List any medications your child is taking for a
+long-term illness or on a regular basis:</label> <textarea name="medications" rows="3"></textarea>
+<h3>Photo Consent</h3>
+<p>I give consent / I don’t give consent to Victory Jolicage Academy permission to use photographs and video of my child...</p>
+<div class="radio-group">
+<label><input type="radio" name="photo_consent" value="give"> I give consent</label>
+<label><input type="radio" name="photo_consent" value="no"> I don’t give consent</label>
+</div>
+<p>(For school records, digital platforms, learning, publicity, website, brochures, etc. Photos available for review on request.)</p>
+<label>Full Name of Child:</label>
+<input type="text" name="child_fullname_photo">
+<label>Grade:</label>
+<input type="text" name="grade_photo">
+<label>Full Name of Parent/Legal Guardian:</label> <input type="text" name="guardian_photo">
+<!-- Signature eld (can be replaced with canvas/signature pad in advanced implementation) -->
+<label>Signature:</label>
+<input type="text" name="signature_photo"
+ 
+placeholder="Type your name as digital signature">
+<label>Date:</label>
+<input type="date" name="date_photo"> </div>
+<!-- Declaration -->
+<div class="section">
+<h2>DECLARATION BY PARENTS or LEGAL GUARDIANS</h2>
+<p>I hereby declare that I agree to the school's terms including fee payment, uniform, participation in Christian
+practices & activities, notice period, etc. (as listed in the original document).</p>
+<label>Full Name of Parent/Legal Guardian:</label>
+<input type="text" name="declaration_name" required>
+<!-- Digital signature -->
+<label>Signature:</label>
+<input type="text" name="declaration_signature" placeholder="Type your name as digital signature" required>
+<label>Date:</label>
+<input type="date" name="declaration_date" required>
+<p class="note">Note: The school adheres to Christian principles but accommodates children from other faiths without restrictions.</p> </div>
+<!-- File Uploads -->
+<div class="section">
+<h2>Compulsory Documents Upload</h2>
+<p>Please upload the following (PDF, JPG, PNG):</p>
+<label>ID/Passport copy of parents</label>
+<input type="file" name="parent_id" accept="image/*" multiple>
+<label>Birth Certificate of Child</label>
+<input type="file" name="birth_certificate" accept="image/*" >
+<label>Last two Progress reports (if applicable)</label> <input type="file" name="progress_reports" multiple>
+<label>One passport	-size color photograph of Child</label>
+<input type="file" accept="image/*"  name="child_photo">
+<label>Immunization card (if yes)</label>
+<input type="file" accept="image/*"  name="immunization_card">
+<label>Other documents</label>
+<input type="file" name="other_docs" accept="image/*"  multiple> </div>
+<div style="text-align: center; margin-top: 40px;">
+<button type="submit" class="btn btn-info" style="padding: 12px 30px; font-size: 18px; border: none; border-radius: 5px; cursor: pointer;">
+Submit Application
+</button>
+</div>
+</form>
+
+    
+        <a href="documents/ADMISSION 2026.pdf" target="_blank" rel="noopener noreferrer">
+            <button class="btn btn-success">download form</button>
+        </a>
+</body>
+    
+</html>

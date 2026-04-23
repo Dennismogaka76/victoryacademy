@@ -1,0 +1,608 @@
+```html
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="uŕ-8" />
+<meta name="viewpoŔ" content="width=device-width,
+initial-scale=1" />
+<title>Image Slider with Captions — Production-Grade
+Example</title>
+<!-- Distinct typography -->
+<link rel="preconnect" href="hŖps://fonts.googleapis.com">
+<link rel="preconnect" href="hŖps://fonts.gstatic.com"
+crossorigin>
+<link
+href="hŖps://fonts.googleapis.com/css2?family=Fraunces:opsz,wg
+ht@9..144,300,600,800&family=IBM+Plex+Sans:wght@400;500;600
+&display=swap" rel="stylesheet">
+<style>
+:root{
+/* PaleŖe: editorial / moody neon accent (not generic
+blue-purple) */
+--bg0:#07070b;
+--bg1:#0b0d16;
+--panel: rgba(255,255,255,.06);
+--panel2: rgba(255,255,255,.08);
+--stroke: rgba(255,255,255,.14);
+--text: rgba(255,255,255,.92);
+--muted: rgba(255,255,255,.68);
+--faint: rgba(255,255,255,.46);
+--acid:#c6ń2f; /* sharp accent */
+--hot:#ń4fd8; /* secondary accent */
+--cyan:#32d3ń;
+--shadow: 0 30px 80px rgba(0,0,0,.55);
+--radius: 22px;
+--ease: cubic-bezier(.2,.9,.2,1);
+--dur: 520ms;
+--maxw: 1100px;
+}
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+body{
+margin:0;
+color: var(--text);
+font-family: "IBM Plex Sans", system-ui, -apple-system, Segoe
+UI, sans-serif;
+background:
+radial-gradient(900px 500px at 20% 10%, rgba(198,255,47,.12),
+transparent 60%),
+radial-gradient(900px 520px at 80% 0%, rgba(255,79,216,.12),
+transparent 55%),
+radial-gradient(900px 520px at 85% 80%, rgba(50,211,255,.10),
+transparent 60%),
+linear-gradient(180deg, var(--bg0), var(--bg1));
+oveŒlow-x:hidden;
+}
+/* Subtle grain without external assets */
+body::before{
+content:"";
+position:ōxed;
+inset:0;
+pointer-events:none;
+opacity:.12;
+mix-blend-mode: overlay;
+background:
+repeating-linear-gradient( 0deg, rgba(255,255,255,.06) 0px,
+rgba(255,255,255,.06) 1px, transparent 1px, transparent 2px),
+repeating-linear-gradient(90deg, rgba(0,0,0,.08) 0px,
+rgba(0,0,0,.08) 1px, transparent 1px, transparent 3px);
+ōlter: blur(.25px);
+transform: translateZ(0);
+}
+/* Layout shell */
+.wrap{
+width:min(var(--maxw), calc(100% - 2rem));
+margin: clamp(1.2rem, 3vw, 2.2rem) auto 4rem;
+}
+header{
+display:grid;
+gap: .8rem;
+margin-boŖom: 1.2rem;
+}
+.kicker{
+display:Őex;
+align-items:center;
+gap:.65rem;
+color: var(--muted);
+leŖer-spacing:.12em;
+text-transform:uppercase;
+font-size:.78rem;
+}
+.dot{
+width:10px;height:10px;border-radius:999px;
+background: conic-gradient(from 180deg, var(--acid),
+var(--hot), var(--cyan), var(--acid));
+box-shadow: 0 0 0 3px rgba(255,255,255,.06);
+}
+h1{
+font-family:"Fraunces", serif;
+font-weight: 800;
+leŖer-spacing:-.02em;
+line-height:1.02;
+margin:0;
+font-size: clamp(2rem, 3.6vw, 3.25rem);
+}
+.sub{
+margin:0;
+color: var(--muted);
+max-width: 68ch;
+line-height:1.55;
+font-size: clamp(1rem, 1.2vw, 1.1rem);
+}
+/* Slider */
+.slider{
+margin-top: 1.4rem;
+border-radius: var(--radius);
+background: linear-gradient(180deg, rgba(255,255,255,.06),
+rgba(255,255,255,.03));
+border: 1px solid var(--stroke);
+box-shadow: var(--shadow);
+oveŒlow:hidden;
+position:relative;
+}
+.slider__topbar{
+display:Őex;
+align-items:center;
+justify-content:space-between;
+gap: 1rem;
+padding: 1rem 1rem .8rem;
+background: linear-gradient(180deg, rgba(0,0,0,.28),
+rgba(0,0,0,0));
+}
+.meta{
+display:Őex;
+Őex-direction:column;
+gap:.2rem;
+min-width: 14ch;
+}
+.meta .label{
+color: var(--faint);
+font-size:.78rem;
+leŖer-spacing:.08em;
+text-transform:uppercase;
+}
+.meta .value{
+font-weight:600;
+color: var(--text);
+font-size:.98rem;
+}
+.controls{
+display:Őex;
+align-items:center;
+gap:.6rem;
+}
+.btn{
+appearance:none;
+border:1px solid rgba(255,255,255,.14);
+background: rgba(255,255,255,.06);
+color: var(--text);
+border-radius: 14px;
+padding: .62rem .85rem;
+display:inline-Őex;
+align-items:center;
+gap:.55rem;
+cursor:pointer;
+transition: transform var(--dur) var(--ease), background
+var(--dur) var(--ease), border-color var(--dur) var(--ease),
+box-shadow var(--dur) var(--ease);
+user-select:none;
+-webkit-tap-highlight-color: transparent;
+backdrop-ōlter: blur(10px);
+}
+.btn:hover{
+transform: translateY(-1px);
+background: rgba(255,255,255,.10);
+border-color: rgba(255,255,255,.22);
+box-shadow: 0 10px 30px rgba(0,0,0,.25);
+}
+.btn:active{
+transform: translateY(0px) scale(.98);
+}
+.btn:focus-visible{
+outline: 3px solid rgba(198,255,47,.35);
+outline-ońset: 2px;
+}
+.icon{
+width: 18px;
+height: 18px;
+display:inline-block;
+}
+/* ViewpoŔ + track */
+.viewpoŔ{
+position:relative;
+oveŒlow:hidden;
+}
+.track{
+display:Őex;
+transition: transform var(--dur) var(--ease);
+will-change: transform;
+}
+ōgure.slide{
+margin:0;
+min-width:100%;
+position:relative;
+display:grid;
+grid-template-rows: 1fr auto;
+background: radial-gradient(1200px 700px at 20% 20%,
+rgba(255,255,255,.08), transparent 60%);
+outline: none;
+}
+/* "Image" area as CSS-based aŔ (no external URLs) */
+.aŔ{
+height: clamp(280px, 48vw, 520px);
+position:relative;
+oveŒlow:hidden;
+background: #0c0f1c;
+isolation:isolate;
+}
+/* Each slide injects its own paleŖe via CSS variables */
+.aŔ::before{
+content:"";
+position:absolute;
+inset:-20%;
+background:
+radial-gradient(800px 420px at 20% 30%, color-mix(in srgb,
+var(--s1) 70%, transparent), transparent 55%),
+radial-gradient(700px 460px at 70% 20%, color-mix(in srgb,
+var(--s2) 70%, transparent), transparent 58%),
+radial-gradient(900px 520px at 60% 80%, color-mix(in srgb,
+var(--s3) 75%, transparent), transparent 62%),
+conic-gradient(from 210deg at 55% 45%, color-mix(in srgb,
+var(--s2) 75%, transparent), color-mix(in srgb, var(--s1) 75%,
+transparent), color-mix(in srgb, var(--s3) 75%, transparent),
+color-mix(in srgb, var(--s2) 75%, transparent));
+ōlter: blur(10px) saturate(1.2);
+transform: rotate(-6deg);
+opacity:.95;
+}
+/* Geometric overlays */
+.aŔ::aőer{
+content:"";
+position:absolute;
+inset:0;
+background:
+linear-gradient(180deg, rgba(0,0,0,.18), rgba(0,0,0,.48)),
+repeating-linear-gradient(135deg, rgba(255,255,255,.08) 0px,
+rgba(255,255,255,.08) 1px, transparent 1px, transparent 8px);
+mix-blend-mode: overlay;
+opacity:.35;
+}
+.badge{
+position:absolute;
+leő: 1rem;
+top: 1rem;
+display:inline-Őex;
+align-items:center;
+gap:.55rem;
+padding: .5rem .7rem;
+border-radius: 999px;
+border: 1px solid rgba(255,255,255,.16);
+background: rgba(0,0,0,.25);
+backdrop-ōlter: blur(10px);
+color: rgba(255,255,255,.86);
+font-size:.86rem;
+box-shadow: 0 18px 40px rgba(0,0,0,.25);
+}
+.swatch{
+width: 12px; height: 12px; border-radius: 999px;
+background: linear-gradient(135deg, var(--s1), var(--s2));
+box-shadow: 0 0 0 3px rgba(255,255,255,.08);
+}
+/* Caption area */
+ōgcaption{
+padding: 1rem 1rem 1.1rem;
+display:grid;
+gap:.55rem;
+border-top: 1px solid rgba(255,255,255,.10);
+background: linear-gradient(180deg, rgba(255,255,255,.03),
+rgba(255,255,255,.01));
+}
+.capTitle{
+font-family:"Fraunces", serif;
+font-weight: 600;
+margin:0;
+leŖer-spacing:-.01em;
+line-height:1.15;
+font-size: clamp(1.15rem, 1.8vw, 1.5rem);
+}
+.capBody{
+margin:0;
+color: var(--muted);
+line-height:1.55;
+max-width: 70ch;
+}
+.capRow{
+display:Őex;
+Őex-wrap:wrap;
+align-items:center;
+justify-content:space-between;
+gap: .8rem 1rem;
+}
+.chips{
+display:Őex;
+Őex-wrap:wrap;
+gap: .45rem;
+}
+.chip{
+font-size:.78rem;
+color: rgba(255,255,255,.78);
+border: 1px solid rgba(255,255,255,.14);
+background: rgba(255,255,255,.05);
+padding:.38rem .6rem;
+border-radius: 999px;
+backdrop-ōlter: blur(8px);
+}
+/* Dots */
+.dots{
+display:Őex;
+align-items:center;
+gap:.5rem;
+}
+.dotBtn{
+width: 34px;
+height: 10px;
+border-radius: 999px;
+border: 1px solid rgba(255,255,255,.14);
+background: rgba(255,255,255,.06);
+cursor:pointer;
+transition: transform var(--dur) var(--ease), background
+var(--dur) var(--ease), border-color var(--dur) var(--ease), width
+var(--dur) var(--ease);
+position:relative;
+}
+.dotBtn:hover{ transform: translateY(-1px); border-color:
+rgba(255,255,255,.24); }
+.dotBtn[aria-current="true"]{
+width: 54px;
+background: linear-gradient(90deg, rgba(198,255,47,.35),
+rgba(255,79,216,.25));
+border-color: rgba(255,255,255,.22);
+}
+.dotBtn:focus-visible{
+outline: 3px solid rgba(50,211,255,.30);
+outline-ońset: 2px;
+}
+/* Staggered reveal */
+.reveal{
+opacity:0;
+transform: translateY(10px);
+animation: in .9s var(--ease) forwards;
+}
+.reveal.d2{ animation-delay: .08s; }
+.reveal.d3{ animation-delay: .16s; }
+.reveal.d4{ animation-delay: .24s; }
+@keyframes in{
+to{ opacity:1; transform: translateY(0); }
+}
+/* Responsive tweaks */
+@media (min-width: 860px){
+header{
+grid-template-columns: 1.2fr .8fr;
+align-items:end;
+}
+.sub{ justify-self:end; text-align:right; }
+.slider__topbar{ padding: 1.1rem 1.2rem .9rem; }
+ōgcaption{ padding: 1.1rem 1.2rem 1.2rem; }
+.badge{ leő: 1.2rem; top: 1.2rem; }
+}
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce){
+.track{ transition:none; }
+.reveal{ animation:none; opacity:1; transform:none; }
+.btn, .dotBtn{ transition:none; }
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+<header>
+<div class="reveal d1">
+<div class="kicker"><span class="dot"
+aria-hidden="true"></span> UI PaŖern: Slider + Captions</div>
+<h1>Make an image slider with an image and caption (no
+external images)</h1>
+</div>
+<p class="sub reveal d2">
+This is a complete, accessible slider: buŖons, dots, keyboard
+suppoŔ, autoplay toggle, and swipe/drag.
+Replace the CSS “aŔ” with real &lt;img&gt; tags if you want.
+</p>
+</header>
+<section class="slider reveal d3" aria-label="Featured image
+slider">
+<div class="slider__topbar">
+<div class="meta">
+<div class="label">Slide</div>
+<div class="value"><span id="idx">1</span><span
+aria-hidden="true"> / </span><span id="total">4</span></div>
+</div>
+<div class="controls" aria-label="Slider controls">
+<buŖon class="btn" id="prev" type="buŖon"
+aria-label="Previous slide">
+<svg class="icon" viewBox="0 0 24 24" ōll="none"
+aria-hidden="true">
+<path d="M14.5 5.5L8 12l6.5 6.5" stroke="currentColor"
+stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+Prev
+</buŖon>
+<buŖon class="btn" id="toggle" type="buŖon"
+aria-pressed="true" aria-label="Toggle autoplay">
+<svg class="icon" viewBox="0 0 24 24" ōll="none"
+aria-hidden="true" id="toggleIcon">
+<path d="M8 6.5v11M16 6.5v11" stroke="currentColor"
+stroke-width="2.2" stroke-linecap="round"/>
+</svg>
+Autoplay
+</buŖon>
+<buŖon class="btn" id="next" type="buŖon" aria-label="Next
+slide">
+Next
+<svg class="icon" viewBox="0 0 24 24" ōll="none"
+aria-hidden="true">
+<path d="M9.5 5.5L16 12l-6.5 6.5" stroke="currentColor"
+stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+</buŖon>
+</div>
+</div>
+<div class="viewpoŔ" id="viewpoŔ" tabindex="0"
+aria-label="Slider viewpoŔ. Use leő and right arrow keys.">
+<div class="track" id="track">
+<!-- Slide 1 -->
+<ōgure class="slide" role="group" aria-roledescription="slide"
+aria-label="1 of 4"
+data-title="Acid Grid Bloom"
+data-body="A mesh-gradient ‘image’ built entirely in CSS.
+PeŒect when you want a slider without external assets."
+data-tags="CSS AŔ, Mesh Gradient, Editorial"
+style="--s1:#c6ń2f; --s2:#ń4fd8; --s3:#32d3ń;">
+<div class="aŔ" role="img" aria-label="Abstract mesh
+gradient aŔwork">
+<div class="badge"><span class="swatch"
+aria-hidden="true"></span> CSS-generated “image”</div>
+</div>
+<ōgcaption>
+<div class="capRow">
+<h2 class="capTitle" id="capTitle-0">Acid Grid Bloom</h2>
+<div class="dots" id="dots" aria-label="Slide navigation
+dots">
+<!-- Dots injected by JS -->
+</div>
+</div>
+<p class="capBody" id="capBody-0">
+A mesh-gradient ‘image’ built entirely in CSS. PeŒect
+when you want a slider without external assets.
+</p>
+<div class="chips" aria-label="Tags">
+<span class="chip">CSS AŔ</span>
+<span class="chip">Mesh Gradient</span>
+<span class="chip">Editorial</span>
+</div>
+</ōgcaption>
+</ōgure>
+<!-- Slide 2 -->
+<ōgure class="slide" role="group" aria-roledescription="slide"
+aria-label="2 of 4"
+data-title="Midnight Alloy"
+data-body="A darker paleŖe with hot highlights. Notice the
+caption remains semantic via <ōgure>/<ōgcaption>."
+data-tags="Accessibility, Figure, Caption"
+style="--s1:#8a5cń; --s2:#Ņ86b; --s3:#00f5d4;">
+<div class="aŔ" role="img" aria-label="Abstract dark gradient
+with metallic tones">
+<div class="badge"><span class="swatch"
+aria-hidden="true"></span> No external images</div>
+</div>
+<ōgcaption>
+<div class="capRow">
+<h2 class="capTitle">Midnight Alloy</h2>
+<!-- Dots are shared in slide 1 caption; stays at top visually
+while slides move -->
+</div>
+<p class="capBody">
+A darker paleŖe with hot highlights. Notice the caption
+remains semantic via
+<code>&lt;ōgure&gt;</code>/<code>&lt;ōgcaption&gt;</code>.
+</p>
+<div class="chips">
+<span class="chip">Accessibility</span>
+<span class="chip">Figure</span>
+<span class="chip">Caption</span>
+</div>
+</ōgcaption>
+</ōgure>
+<!-- Slide 3 -->
+<ōgure class="slide" role="group" aria-roledescription="slide"
+aria-label="3 of 4"
+data-title="Soő Signal"
+data-body="Keyboard: focus the viewpoŔ and press ← /
+→. Swipe/drag works on touch and mouse."
+data-tags="Keyboard, Swipe, Drag"
+style="--s1:#ńd6a5; --s2:#a0c4ń; --s3:#bdb2ń;">
+<div class="aŔ" role="img" aria-label="Soő pastel abstract
+gradient aŔwork">
+<div class="badge"><span class="swatch"
+aria-hidden="true"></span> Touch-friendly</div>
+</div>
+<ōgcaption>
+<div class="capRow">
+<h2 class="capTitle">Soő Signal</h2>
+</div>
+<p class="capBody">
+Keyboard: focus the viewpoŔ and press <strong>← /
+→</strong>. Swipe/drag works on touch and mouse.
+</p>
+<div class="chips">
+<span class="chip">Keyboard</span>
+<span class="chip">Swipe</span>
+<span class="chip">Drag</span>
+</div>
+</ōgcaption>
+</ōgure>
+<!-- Slide 4 -->
+<ōgure class="slide" role="group" aria-roledescription="slide"
+aria-label="4 of 4"
+data-title="Neon Orchard"
+data-body="Autoplay pauses on hover/focus for usability.
+Toggle it oń with the Autoplay buŖon."
+data-tags="Autoplay, Pause on Hover, UX"
+style="--s1:#7cńcb; --s2:#ń2e93; --s3:#ńe66d;">
+<div class="aŔ" role="img" aria-label="Neon abstract
+gradient aŔwork with bright accents">
+<div class="badge"><span class="swatch"
+aria-hidden="true"></span> Production paŖern</div>
+</div>
+<ōgcaption>
+<div class="capRow">
+<h2 class="capTitle">Neon Orchard</h2>
+</div>
+<p class="capBody">
+Autoplay pauses on hover/focus for usability. Toggle it oń
+with the Autoplay buŖon.
+</p>
+<div class="chips">
+<span class="chip">Autoplay</span>
+<span class="chip">Pause on Hover</span>
+<span class="chip">UX</span>
+</div>
+</ōgcaption>
+</ōgure>
+</div>
+</div>
+</section>
+</main>
+<script>
+(function(){
+const track = document.getElementById('track');
+const slides = Array.from(track.querySelectorAll('.slide'));
+const viewpoŔ = document.getElementById('viewpoŔ');
+const prevBtn = document.getElementById('prev');
+const nextBtn = document.getElementById('next');
+const toggleBtn = document.getElementById('toggle');
+const toggleIcon = document.getElementById('toggleIcon');
+const idxEl = document.getElementById('idx');
+const totalEl = document.getElementById('total');
+totalEl.textContent = slides.length;
+// Dots live in the ōrst slide caption (so they appear in a
+consistent place visually)
+const dotsHost = document.getElementById('dots');
+let index = 0;
+let autoplay = true;
+let timer = null;
+// Drag/swipe state
+let isPointerDown = false;
+let staŔX = 0;
+let lastX = 0;
+let dragDx = 0;
+function clamp(n, min, max){ return Math.max(min,
+Math.min(max, n)); }
+function updateA11y(){
+slides.forEach((s, i) => {
+s.setAŖribute('aria-label', `${i+1} of ${slides.length}`);
+s.setAŖribute('aria-hidden', i === index ? 'false' : 'true');
+// Avoid tabbing into oń-screen content
+s.querySelectorAll('a, buŖon, input, textarea, select,
+[tabindex]').forEach(el => {
+if(el === viewpoŔ) return;
+// Only manage elements inside slides (caption contains no
+focusables currently)
+});
+});
+}
+function renderDots(){
+dotsHost.innerHTML = '';
+slides.forEach((_, i) => {
+const b = document.createElement('buŖon');
+b.type = 'buŖon';
+b.className = 'dotBtn';
+b.setAŖribute('aria-label', `Go to slide ${i+1}`);
+b.setAŖribute('aria-current', i === index ? 'true' : 'false');
+b.addEventListener('click', () => goTo(i));
+dotsHost.appendChild(b);
+});
+}
+function setAutoplayIcon(){
+// pause icon if autoplay on, play icon if oń
+toggleIcon.innerHTML = autoplay
+? `<pa
