@@ -55,6 +55,7 @@ nav>img{
     position: relative;
     overflow: hidden;
     border-radius: 10px;
+   align-items:center;
 }
 .vid{
     padding-left: 3vw;
